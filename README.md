@@ -1,4 +1,4 @@
-# npm_packages_memo
+# npm-rjn-demo
 
 This page can preview at: 
-https://rawgit.com/crongjie/npm_packages_memo/master/index.html
+https://rawgit.com/crongjie/npm-rjn-demo/master/index.html
