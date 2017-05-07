@@ -28863,7 +28863,7 @@ var RNavBar = _react2.default.createClass({
                           { key: 'mi' + idx + '-' + sidx },
                           _react2.default.createElement(
                             _reactRouter.Link,
-                            { to: BASE_URL + subitem.url },
+                            { to: subitem.url },
                             subitem.text
                           )
                         );
@@ -28876,7 +28876,7 @@ var RNavBar = _react2.default.createClass({
                     { key: 'mi' + idx },
                     _react2.default.createElement(
                       _reactRouter.Link,
-                      { to: BASE_URL + menuitem.url },
+                      { to: menuitem.url },
                       menuitem.text
                     )
                   );
