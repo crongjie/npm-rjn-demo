@@ -20,7 +20,7 @@ if (_.endsWith(BASE_URL,'/')) BASE_URL = BASE_URL.substring(0, BASE_URL.length -
 
 let RNotfound = React.createClass({
 	render: function() {
-        return (<h2>{BASE_URL} route not found!</h2>);
+        return (<h2>Route not found!</h2>);
 	}
 });
   	
@@ -28,8 +28,8 @@ let RNotfound = React.createClass({
 
 ReactDOM.render(
 	<Router history={hashHistory}>
-		<Route path={ BASE_URL +  "/" } component={ RPage }  / >
-		<Route path={ BASE_URL +  "/:page" } component={ RPage }  / >
+		<Route path={ "/" } component={ RPage }  / >
+		<Route path={ "/:page" } component={ RPage }  / >
 		<Route path="*" component={ RNotfound }  / >
 	</Router>
 , document.getElementById("main"));

@@ -4000,8 +4000,7 @@ var RNotfound = _react2.default.createClass({
 		return _react2.default.createElement(
 			'h2',
 			null,
-			BASE_URL,
-			' route not found!'
+			'Route not found!'
 		);
 	}
 });
@@ -4009,8 +4008,8 @@ var RNotfound = _react2.default.createClass({
 _reactDom2.default.render(_react2.default.createElement(
 	_reactRouter.Router,
 	{ history: _reactRouter.hashHistory },
-	_react2.default.createElement(_reactRouter.Route, { path: BASE_URL + "/", component: _RPage2.default }),
-	_react2.default.createElement(_reactRouter.Route, { path: BASE_URL + "/:page", component: _RPage2.default }),
+	_react2.default.createElement(_reactRouter.Route, { path: "/", component: _RPage2.default }),
+	_react2.default.createElement(_reactRouter.Route, { path: "/:page", component: _RPage2.default }),
 	_react2.default.createElement(_reactRouter.Route, { path: '*', component: RNotfound })
 ), document.getElementById("main"));
 
