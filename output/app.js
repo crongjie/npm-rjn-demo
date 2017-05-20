@@ -28862,11 +28862,12 @@ var RNavBar = _react2.default.createClass({
                           'li',
                           { key: 'mi' + idx + '-' + sidx },
                           _react2.default.createElement(
-                            _reactRouter.Link,
-                            { to: subitem.url },
+                            'a',
+                            { href: '#' + subitem.url },
                             subitem.text
                           )
                         );
+                        // else return <li key = { 'mi' + idx + '-'  + sidx }><Link to={ subitem.url }>{subitem.text}</Link></li>
                       })
                     )
                   );

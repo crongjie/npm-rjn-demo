@@ -44,7 +44,8 @@ let RNavBar = React.createClass({
                         menuitem.items.map(function(subitem, sidx){
                             if (subitem.type == 'separator') return <li key = { 'mi' + idx + '-'  + sidx } role="separator" className="divider"></li>;
                             else if (subitem.type == 'header') return <li key = { 'mi' + idx + '-'  + sidx } className="dropdown-header">{subitem.text}</li>;
-                            else return <li key = { 'mi' + idx + '-'  + sidx }><Link to={ subitem.url }>{subitem.text}</Link></li>
+                            else return <li key = { 'mi' + idx + '-'  + sidx }><a href={ '#'+ subitem.url }>{subitem.text}</a></li>
+                           // else return <li key = { 'mi' + idx + '-'  + sidx }><Link to={ subitem.url }>{subitem.text}</Link></li>
                         })
                       }
                   </ul>
