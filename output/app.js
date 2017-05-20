@@ -28519,6 +28519,8 @@ exports.default = {
 "use strict";
 
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 function exportFile(text, filename, mime) {
     if (!filename) filename = "download.txt";
 
@@ -28532,10 +28534,60 @@ function exportFile(text, filename, mime) {
     document.body.removeChild(a);
 }
 
+function isObject(obj) {
+    return obj != null && (typeof obj === 'undefined' ? 'undefined' : _typeof(obj)) === 'object' && Object.prototype.toString.call(obj) === '[object Object]';
+}
+
 module.exports.exportFile = exportFile;
 
 module.exports.exportText = function (text, filename) {
     exportFile(text, filename, 'text/plain;charset=utf-8');
+};
+
+module.exports.exportText = function (text, filename) {
+    exportFile(text, filename, 'text/plain;charset=utf-8');
+};
+
+module.exports.exportJson = function (obj, filename) {
+    if (!filename) filename = "download.json";
+    exportFile(JSON.stringify(obj), filename, 'application/json;charset=utf-8');
+};
+
+module.exports.exportCSV = function (obj, filename, options) {
+    if (!Array.isArray(obj)) {
+        alert('input is not array!');
+        return;
+    }
+    if (!filename) filename = "download.csv";
+    var output = '',
+        keys = [];
+    if (options && options.columns && isObject(options.columns)) {
+        var line_column_headers = '';
+        for (var key in options.columns) {
+            keys.push(key);
+            line_column_headers += (line_column_headers == "" ? "" : ",") + options.columns[key];
+        }
+        output += line_column_headers + '\r\n';
+    } else {
+        if (obj.length > 0) {
+            var line_column_headers = '';
+            for (var key in obj[0]) {
+                keys.push(key);
+                line_column_headers += (line_column_headers == "" ? "" : ",") + key;
+            }
+            output += line_column_headers + '\r\n';
+        }
+    }
+
+    for (var i = 0, len = obj.length; i < len; ++i) {
+        var line = '';
+        for (var k = 0, klen = keys.length; k < klen; ++k) {
+            line += (k > 0 ? ',' : '') + '"' + obj[i][keys[k]] + '"';
+        }
+        output += line + '\r\n';
+    }
+
+    exportFile(output, filename, 'text/csv;charset=utf-8');
 };
 
 /***/ }),
@@ -29092,6 +29144,15 @@ var ExportExample = React.createClass({
             React.createElement(
                 "button",
                 { type: "button", className: "btn btn-primary", onClick: function onClick() {
+                        (0, _rjnExport.exportFile)('Hello,World', 'someFileName.csv', 'text/csv');
+                    } },
+                "exportFile( 'Hello,World', 'someFileName.csv', 'text/csv')"
+            ),
+            React.createElement("br", null),
+            React.createElement("br", null),
+            React.createElement(
+                "button",
+                { type: "button", className: "btn btn-primary", onClick: function onClick() {
                         (0, _rjnExport.exportText)('Hello');
                     } },
                 "exportText('Hello')"
@@ -29110,9 +29171,32 @@ var ExportExample = React.createClass({
             React.createElement(
                 "button",
                 { type: "button", className: "btn btn-primary", onClick: function onClick() {
-                        (0, _rjnExport.exportFile)('Hello,World', 'someFileName.csv', 'text/csv');
+                        (0, _rjnExport.exportJson)({ hello: 'world', hi: 'world' });
                     } },
-                "exportFile( 'Hello,World', 'someFileName.csv', 'text/csv')"
+                "exportJson({ hello: 'world' , hi: 'world'})"
+            ),
+            React.createElement("br", null),
+            React.createElement("br", null),
+            React.createElement(
+                "button",
+                { type: "button", className: "btn btn-primary", onClick: function onClick() {
+                        (0, _rjnExport.exportCSV)([{ A: 1, B: 1 }, { A: 2, B: 2 }]);
+                    } },
+                "exportCSV([{A:1, B:1},{A:2, B:2}])"
+            ),
+            React.createElement("br", null),
+            React.createElement("br", null),
+            React.createElement(
+                "button",
+                { type: "button", className: "btn btn-primary", onClick: function onClick() {
+                        (0, _rjnExport.exportCSV)([{ A: 1, B: 1 }, { A: 2, B: 2 }], 'someFileName.csv', {
+                            columns: {
+                                A: 'Column 1',
+                                B: 'Column 2'
+                            }
+                        });
+                    } },
+                "exportCSV( [{A:1, B:1},{A:2, B:2}],'someFileName.csv', {...})"
             )
         );
     }
@@ -29132,7 +29216,7 @@ var npmRjnExport = exports.npmRjnExport = [{
     "title": "Usage",
     "language": "js",
     "type": "source",
-    "code": "\nimport { exportText, exportFile } from 'rjn-export'\n\n//Export and download a file with text 'Hello', the default file name is 'download.txt'\nexportText('Hello'); \n\n//Export and download a file with text 'Hello' with the file name is 'someFileName.txt'\nexportText('Hello','someFileName.txt'); \n\n //Export a file with specific mime type. In this example, it will export a csv file\nexportFile( 'Hello,World', 'someFileName.csv', 'text/csv');\n"
+    "code": "\nimport { exportText, exportFile, exportJson, exportCSV } from 'rjn-export'\n\n //Export a file with specific mime type. In this example, it will export a csv file\nexportFile( 'Hello,World', 'someFileName.csv', 'text/csv');\n\n//Export and download a file with text 'Hello', the default file name is 'download.txt'\nexportText('Hello'); \n\n//Export and download a file with text 'Hello' with the file name is 'someFileName.txt'\nexportText('Hello','someFileName.txt'); \n\n//Export and download a json file by object, the default file name is 'download.json'\nexportJson({ hello: 'world' , hi: 'world'}); \n\n//Export and download a json file by object, the file name is 'someFileName.json'\nexportJson(['Hello','World'],'someFileName.json'); \n\n//Export and download a CSV file by Array, the default file name is 'download.csv'\nexportCSV([{A:1, B:1},{A:2, B:2}]); \n\n//Export and download a CSV file by Array, the file name is 'someFileName.csv'\nexportCSV([{A:1, B:1},{A:2, B:2}],'someFileName.csv'); \n\n//Export and download a CSV file by Array, the file name is 'someFileName.csv', with specifiy column headers\nexportCSV(\n    [{A:1, B:1},{A:2, B:2}],\n    'someFileName.csv',\n    {\n        columns: {\n            A: 'Column 1',\n            B: 'Column 2'\n        }\n    }\n); \n\n\n"
 }, React.createElement(ExportExample, null)];
 
 /***/ }),
