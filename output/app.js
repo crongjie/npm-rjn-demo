@@ -28523,15 +28523,20 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 function exportFile(text, filename, mime) {
     if (!filename) filename = "download.txt";
+    var blob = new Blob([text], { type: mime });
 
-    var a = window.document.createElement('a');
-    a.href = window.URL.createObjectURL(new Blob([text], { type: mime }));
-    a.download = filename;
+    if (navigator && navigator.msSaveOrOpenBlob) {
+        navigator.msSaveOrOpenBlob(blob, filename);
+    } else {
+        var a = window.document.createElement('a');
+        a.href = window.URL.createObjectURL(blob);
+        a.download = filename;
 
-    document.body.appendChild(a);
-    a.click();
+        document.body.appendChild(a);
+        a.click();
 
-    document.body.removeChild(a);
+        document.body.removeChild(a);
+    }
 }
 
 function isObject(obj) {
